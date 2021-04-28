@@ -1,0 +1,10 @@
+[DEFAULT]
+dist = buster-backports
+debian-branch = debian/X.Y/buster-backports
+debian-tag = debian/%(version)s
+upstream-branch = upstream-X.Y
+upstream-tag = upstream/%(version)s
+pristine-tar = False
+
+[dch]
+meta = 1
