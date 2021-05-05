@@ -1,0 +1,57 @@
+# Starter pipeline
+# Start with a minimal pipeline that you can customize to build and deploy your code.
+# Add steps that build, run tests, deploy, and more:
+# https://aka.ms/yaml
+
+trigger: none
+
+pr: none
+
+stages:
+- stage: Build
+  jobs:
+  - job:
+    displayName: "build"
+    timeoutInMinutes: 60
+
+    pool:
+      vmImage: ubuntu-20.04
+
+    steps:
+    - script: |
+        sudo rm -rf $(ls -A1)
+      displayName: 'Clean Workspace'
+
+    - script: |
+        echo "Init.." 
+      displayName: 'Init'
+
+    - checkout: self
+      clean: true
+      submodules: recursive
+      displayName: 'Checkout code'
+
+    - task: DownloadPipelineArtifact@2
+      inputs:
+        source: specific
+        project: build
+        pipeline: 168
+        artifact: openssl
+        runVersion: 'latestFromBranch'
+        runBranch: 'refs/heads/main'
+      displayName: "Download openssl packages"
+
+    - script: |
+        sudo apt-get update
+        sudo apt-get install -y quilt build-essential debhelper bc
+        sudo dpkg -i --force-overwrite ../openssl/*.deb
+      displayName: 'Install packages'
+
+    - script: |
+        make
+        cp *.deb $(Build.ArtifactStagingDirectory)/
+      displayName: "Build"
+
+    - publish: $(Build.ArtifactStagingDirectory)/
+      artifact: golang
+      displayName: "Archive artifacts"
