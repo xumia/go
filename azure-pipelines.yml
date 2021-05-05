@@ -51,7 +51,11 @@ stages:
         sudo apt-get update
         sudo apt-get install -y quilt build-essential debhelper bc
         sudo apt-get install -y gccgo golang
-        sudo dpkg -i --force-overwrite $(Build.ArtifactStagingDirectory)/openssl/*.deb
+        cd $(Build.ArtifactStagingDirectory)/openssl/
+        sudo dpkg -i --force-overwrite libssl1.1_1.1.1g-fips_amd64.deb
+        sudo dpkg -i --force-overwrite libssl-dev_1.1.1g-fips_amd64.deb
+        sudo dpkg -i --force-overwrite openssl_1.1.1g-fips_amd64.deb
+        sudo dpkg -i --force-overwrite libssl-doc_1.1.1g-fips_all.deb
       displayName: 'Install packages'
 
     - script: |
