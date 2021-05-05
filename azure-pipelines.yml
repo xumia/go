@@ -37,20 +37,21 @@ stages:
         project: build
         pipeline: 168
         artifact: openssl
+        targetFolder: '$(Build.ArtifactStagingDirectory)/openssl'
         runVersion: 'latestFromBranch'
         runBranch: 'refs/heads/main'
       displayName: "Download openssl packages"
 
     - script: |
         ls .. -l
-        ls ../openssl -l
+        ls $(Build.ArtifactStagingDirectory)/openssl -l
       displayName: 'List packages'
 
     - script: |
         sudo apt-get update
         sudo apt-get install -y quilt build-essential debhelper bc
         sudo apt-get install -y gccgo golang
-        sudo dpkg -i --force-overwrite ../openssl/*.deb
+        sudo dpkg -i --force-overwrite $(Build.ArtifactStagingDirectory)/openssl/*.deb
       displayName: 'Install packages'
 
     - script: |
