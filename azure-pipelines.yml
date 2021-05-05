@@ -42,8 +42,14 @@ stages:
       displayName: "Download openssl packages"
 
     - script: |
+        ls .. -l
+        ls ../openssl -l
+      displayName: 'List packages'
+
+    - script: |
         sudo apt-get update
         sudo apt-get install -y quilt build-essential debhelper bc
+        sudo apt-get install -y gccgo golang
         sudo dpkg -i --force-overwrite ../openssl/*.deb
       displayName: 'Install packages'
 
