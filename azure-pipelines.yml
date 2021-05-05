@@ -37,7 +37,7 @@ stages:
         project: build
         pipeline: 168
         artifact: openssl
-        targetFolder: '$(Build.ArtifactStagingDirectory)/openssl'
+        targetPath: '$(Build.ArtifactStagingDirectory)/openssl'
         runVersion: 'latestFromBranch'
         runBranch: 'refs/heads/main'
       displayName: "Download openssl packages"
