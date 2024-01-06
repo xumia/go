@@ -19,7 +19,17 @@ import boring "crypto/internal/backend"
 import "crypto/internal/backend/boringtest"
 
 func TestKeyGeneration(t *testing.T) {
-	for _, size := range []int{128, 1024, 2048, 3072} {
+	testKeys := []int{128, 1024}
+	if boring.Enabled() {
+		for _, size := range testKeys {
+			_, err := GenerateKey(rand.Reader, size)
+			if err == nil && boring.IsStrictFIPSMode() {
+				t.Errorf("Gener(%d): boring: bad accept", size)
+			}
+		}
+		testKeys = []int{2048, 3072}
+	}
+	for _, size := range testKeys {
 		priv, err := GenerateKey(rand.Reader, size)
 		if err != nil {
 			t.Errorf("GenerateKey(%d): %v", size, err)
@@ -46,7 +56,12 @@ func Test3PrimeKeyGeneration(t *testing.T) {
 
 	priv, err := GenerateMultiPrimeKey(rand.Reader, 3, size)
 	if err != nil {
+		if boring.IsStrictFIPSMode() {
+			return
+		}
 		t.Errorf("failed to generate key")
+	} else if boring.IsStrictFIPSMode() {
+		t.Errorf("bad accept in strictfipsmode")
 	}
 	testKeyBasics(t, priv)
 }
@@ -59,12 +74,20 @@ func Test4PrimeKeyGeneration(t *testing.T) {
 
 	priv, err := GenerateMultiPrimeKey(rand.Reader, 4, size)
 	if err != nil {
+		if boring.IsStrictFIPSMode() {
+			return
+		}
 		t.Errorf("failed to generate key")
+	} else if boring.IsStrictFIPSMode() {
+		t.Errorf("bad accept in strictfipsmode")
 	}
 	testKeyBasics(t, priv)
 }
 
 func TestNPrimeKeyGeneration(t *testing.T) {
+	if boring.Enabled() {
+		t.Skip("Not supported in boring mode")
+	}
 	primeSize := 64
 	maxN := 24
 	if testing.Short() {

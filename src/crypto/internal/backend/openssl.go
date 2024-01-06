@@ -14,8 +14,16 @@ import (
 	"github.com/golang-fips/openssl-fips/openssl"
 )
 
+func init() {
+	strictFIPSOpenSSLRuntimeCheck()
+}
+
 // Enabled controls whether FIPS crypto is enabled.
 var Enabled = openssl.Enabled
+
+func IsStrictFIPSMode() bool {
+  return isStrictFIPS
+}
 
 // Unreachable marks code that should be unreachable
 // when OpenSSLCrypto is in use. It panics only when
