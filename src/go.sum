@@ -1,3 +1,5 @@
+github.com/golang-fips/openssl-fips v0.0.0-20230801195554-ddd8f7dcf431 h1:K1RdHNhLMXzfSXu74E7B76vbHOsq8eCq7mZnlbA33uo=
+github.com/golang-fips/openssl-fips v0.0.0-20230801195554-ddd8f7dcf431/go.mod h1:V2IU8imz/VkScnIbTOrdYsZ5R88ZFypCE0LzhRJ3HsI=
 golang.org/x/crypto v0.0.0-20220516162934-403b01795ae8 h1:y+mHpWoQJNAHt26Nhh6JP7hvM71IRZureyvZhoVALIs=
 golang.org/x/crypto v0.0.0-20220516162934-403b01795ae8/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
 golang.org/x/net v0.0.0-20230214200805-d99f623d45a4 h1:iaVaPFITmD6a3T5kPUYNWiaNrPvSEl6s+xvx6B9yfR0=

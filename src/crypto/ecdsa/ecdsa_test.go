@@ -12,7 +12,7 @@ import (
 	"crypto/sha1"
 	"crypto/sha256"
 	"crypto/sha512"
-	"crypto/internal/boring"
+	boring "crypto/internal/backend"
 	"crypto/internal/backend/boringtest"
 	"encoding/hex"
 	"hash"
@@ -34,7 +34,7 @@ func testAllCurves(t *testing.T, f func(*testing.T, elliptic.Curve)) {
 	}
 	if testing.Short() {
 		tests = tests[:1]
-	} else if !boring.Enabled || boringtest.Supports(t, "CurveP224") {
+	} else if !boring.Enabled() || boringtest.Supports(t, "CurveP224") {
 		p224 := struct {
 			name  string
 			curve elliptic.Curve
@@ -230,7 +230,7 @@ func TestVectors(t *testing.T) {
 
 			switch curve {
 			case "P-224":
-				if !boring.Enabled || boringtest.Supports(t, "CurveP224") {
+				if !boring.Enabled() || boringtest.Supports(t, "CurveP224") {
 					pub.Curve = elliptic.P224()
 				} else {
 					pub.Curve = nil

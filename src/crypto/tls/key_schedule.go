@@ -7,8 +7,8 @@ package tls
 import (
 	"crypto/elliptic"
 	"crypto/hmac"
-	"crypto/internal/boring"
-	"crypto/internal/boring/bbig"
+	boring "crypto/internal/backend"
+	"crypto/internal/backend/bbig"
 	"errors"
 	"fmt"
 	"hash"
@@ -62,7 +62,7 @@ func (c *cipherSuiteTLS13) expandLabel(secret []byte, label string, context []by
 		panic(fmt.Errorf("failed to construct HKDF label: %s", err))
 	}
 	out := make([]byte, length)
-	if boring.Enabled {
+	if boring.Enabled() {
 		reader, err := boring.ExpandHKDF(c.hash.New, secret, hkdfLabelBytes)
 		if err != nil {
 		        panic("tls: HKDF-Expand-Label invocation failed unexpectedly")
@@ -93,7 +93,7 @@ func (c *cipherSuiteTLS13) extract(newSecret, currentSecret []byte) []byte {
 	if newSecret == nil {
 		newSecret = make([]byte, c.hash.Size())
 	}
-	if boring.Enabled {
+	if boring.Enabled() {
 		ikm, err := boring.ExtractHKDF(c.hash.New, newSecret, currentSecret)
 		if err != nil {
 			panic("tls: HKDF-Extract invocation failed unexpectedly")
@@ -167,7 +167,7 @@ func generateECDHEParameters(rand io.Reader, curveID CurveID) (ecdheParameters, 
 
 	p := &nistParameters{curveID: curveID}
 	var err error
-	if boring.Enabled {
+	if boring.Enabled() {
 		x, y, d, err := boring.GenerateKeyECDH(curve.Params().Name)
 		if err != nil {
 			return nil, err
@@ -214,7 +214,7 @@ func (p *nistParameters) PublicKey() []byte {
 
 func (p *nistParameters) SharedKey(peerPublicKey []byte) []byte {
 	curve, _ := curveForCurveID(p.curveID)
-	if boring.Enabled {
+	if boring.Enabled() {
 		k := new(big.Int).SetBytes(p.privateKey)
 		priv, err := boring.NewPrivateKeyECDH(curve.Params().Name, bbig.Enc(p.x), bbig.Enc(p.y), bbig.Enc(k))
 		if err != nil {

@@ -3,6 +3,7 @@ module std
 go 1.19
 
 require (
+	github.com/golang-fips/openssl-fips v0.0.0-20230801195554-ddd8f7dcf431
 	golang.org/x/crypto v0.0.0-20220516162934-403b01795ae8
 	golang.org/x/net v0.0.0-20230214200805-d99f623d45a4
 )
