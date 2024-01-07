@@ -83,9 +83,15 @@ static unsigned long _goboringcrypto_internal_OPENSSL_VERSION_NUMBER(void) {
 	return OPENSSL_VERSION_NUMBER;
 }
 
+#include <openssl/crypto.h>
+#include "openssl/conf.h"
+
+DEFINEFUNCINTERNAL(int, OPENSSL_init_crypto, (uint64_t opts, const OPENSSL_INIT_SETTINGS *settings), (opts, settings))
+
 static void
 _goboringcrypto_OPENSSL_setup(void) {
 	_goboringcrypto_internal_OPENSSL_init();
+    _goboringcrypto_internal_OPENSSL_init_crypto(OPENSSL_INIT_LOAD_CONFIG, NULL);
 }
 
 #include <openssl/err.h>
